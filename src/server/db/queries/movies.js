@@ -17,6 +17,10 @@ function updateMovie(id, params) {
   return knex('movies').where({id: parseInt(id)}).update(params).returning('*');
 }
 
+function deleteMovie(id) {
+  return knex('movies').where({id: parseInt(id)}).del().returning('*');
+}
+
 module.exports = {
-  getAllMovies, getSingleMovie, addNewMovie, updateMovie
+  getAllMovies, getSingleMovie, addNewMovie, updateMovie, deleteMovie
 };

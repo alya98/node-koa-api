@@ -202,4 +202,57 @@ describe('routes : movies', () => {
       });
     });
   });
+
+  describe('DELETE /api/v1/movies/:id', () => {
+    it('should return the movie which was deleted', (done) => {
+      knex('movies')
+      .select('*')
+      .then((movies) => {
+        const movieObject = movies[0];
+        const lengthBeforeDelete = movies.length;
+        chai.request(server)
+        .delete(`/api/v1/movies/${movieObject.id}`)
+        .end((err, res) => {
+          // there should be no errors
+          should.not.exist(err);
+          // there should be a 200 status code
+          res.status.should.equal(200);
+          // the response should be JSON
+          res.type.should.equal('application/json');
+          // the JSON response body should have a
+          // key-value pair of {"status": "success"}
+          res.body.status.should.eql('success');
+          // the JSON response body should have a
+          // key-value pair of {"data": 1 movie object}
+          res.body.data[0].should.include.keys(
+            'id', 'name', 'genre', 'rating', 'explicit'
+          );
+          // ensure the movie was in fact deleted
+          knex('movies').select('*').then(updatedMovies => {
+            updatedMovies.length.should.not.equal(lengthBeforeDelete)
+            done();
+          })
+      });
+    });
+  });
+
+    it('should throw an error if the movies does not exist', (done) => {
+      chai.request(server)
+      .delete('/api/v1/movies/9999')
+      .end((err, res) => {
+        // there should an error
+        // should.exist(err);
+        // there should be a 400 status code
+        res.status.should.equal(404);
+        // the response should be JSON
+        res.type.should.equal('application/json');
+        // the JSON response body should have a
+        // key-value pair of {"status": "error"}
+        res.body.status.should.eql('error');
+        // the JSON response body should have a message key
+        res.body.message.should.eql('That movie does not exist.');
+        done();
+      });
+    });
+  });
 });

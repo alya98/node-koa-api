@@ -20,10 +20,10 @@ describe('routes : movies', () => {
     return knex.migrate.rollback();
   });
 
-  describe('GET /api/v1/movies', () => {
+  describe('GET /movies', () => {
     it('should return all movies', (done) => {
       chai.request(server)
-      .get('/api/v1/movies')
+      .get('/movies')
       .end((err, res) => {
         // there should be no errors
         should.not.exist(err);
@@ -48,10 +48,10 @@ describe('routes : movies', () => {
   });
 
 
-  describe('GET /api/v1/movies/:id', () => {
+  describe('GET /movies/:id', () => {
     it('should respond with a single movie', (done) => {
       chai.request(server)
-      .get('/api/v1/movies/1')
+      .get('/movies/1')
       .end((err, res) => {
         // there should be no errors
         should.not.exist(err);
@@ -73,7 +73,7 @@ describe('routes : movies', () => {
 
     it('should throw an error if the movie does not exist', (done) => {
       chai.request(server)
-      .get('/api/v1/movies/9999999')
+      .get('/movies/9999999')
       .end((err, res) => {
         // there should an error
         //should.exist(err);
@@ -92,10 +92,10 @@ describe('routes : movies', () => {
     });
   });
 
-  describe('POST /api/v1/movies', () => {
+  describe('POST /movies', () => {
     it('should return the movie that was added', (done) => {
       chai.request(server)
-      .post('/api/v1/movies')
+      .post('/movies')
       .send({
         name: 'Titanic',
         genre: 'Drama',
@@ -124,7 +124,7 @@ describe('routes : movies', () => {
 
     it('should throw an error if the payload is malformed', (done) => {
       chai.request(server)
-      .post('/api/v1/movies')
+      .post('/movies')
       .send({
         name: 'Titanic'
       })
@@ -145,14 +145,14 @@ describe('routes : movies', () => {
     });
   });
 
-  describe('PUT /api/v1/movies', () => {
+  describe('PUT /movies', () => {
     it('should return the movie that was updated', (done) => {
       knex('movies')
       .select('*')
       .then((movie) => {
         const movieObject = movie[0];
         chai.request(server)
-        .put(`/api/v1/movies/${movieObject.id}`)
+        .put(`/movies/${movieObject.id}`)
         .send({
           rating: 9
         })
@@ -181,7 +181,7 @@ describe('routes : movies', () => {
 
     it('should throw an error if the movie does not exist', (done) => {
       chai.request(server)
-      .put('/api/v1/movies/9999999')
+      .put('/movies/9999999')
       .send({
         rating: 9
       })
@@ -203,7 +203,7 @@ describe('routes : movies', () => {
     });
   });
 
-  describe('DELETE /api/v1/movies/:id', () => {
+  describe('DELETE /movies/:id', () => {
     it('should return the movie which was deleted', (done) => {
       knex('movies')
       .select('*')
@@ -211,7 +211,7 @@ describe('routes : movies', () => {
         const movieObject = movies[0];
         const lengthBeforeDelete = movies.length;
         chai.request(server)
-        .delete(`/api/v1/movies/${movieObject.id}`)
+        .delete(`/movies/${movieObject.id}`)
         .end((err, res) => {
           // there should be no errors
           should.not.exist(err);
@@ -238,7 +238,7 @@ describe('routes : movies', () => {
 
     it('should throw an error if the movies does not exist', (done) => {
       chai.request(server)
-      .delete('/api/v1/movies/9999')
+      .delete('/movies/9999')
       .end((err, res) => {
         // there should an error
         // should.exist(err);

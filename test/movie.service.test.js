@@ -62,10 +62,10 @@ describe('movie service', () => {
       request.delete.restore();
     });
 
-    describe('GET /api/v1/movies', () => {
+    describe('GET /movies', () => {
       it('should return all movies', (done) => {
         this.get.yields(null, movies.all.success.res, JSON.stringify(movies.all.success.body));
-        request.get(`${base}/api/v1/movies`, (err, res, body) => {
+        request.get(`${base}/movies`, (err, res, body) => {
           // there should be a 200 status code
           res.statusCode.should.equal(200);
           // the response should be JSON
@@ -90,11 +90,11 @@ describe('movie service', () => {
       });
     });
 
-    describe('GET /api/v1/movies/:id', () => {
+    describe('GET /movies/:id', () => {
       it('should respond with a single movie', (done) => {
         const obj = movies.single.success;
         this.get.yields(null, obj.res, JSON.stringify(obj.body));
-        request.get(`${base}/api/v1/movies/4`, (err,res,body) => {
+        request.get(`${base}/movies/4`, (err,res,body) => {
           res.statusCode.should.equal(200);
           res.headers['content-type'].should.equal('application/json');
           body = JSON.parse(body);
@@ -109,7 +109,7 @@ describe('movie service', () => {
       it('should throw an error if the movie does not exist', (done) => {
         const obj = movies.single.failure;
         this.get.yields(null, obj.res, JSON.stringify(obj.body));
-        request.get(`${base}/api/v1/movies/99999`, (err,res,body) => {
+        request.get(`${base}/movies/99999`, (err,res,body) => {
           res.statusCode.should.equal(404);
           res.headers['content-type'].should.equal('application/json');
           body = JSON.parse(body);
@@ -120,7 +120,7 @@ describe('movie service', () => {
       });
     });
 
-    describe('POST /api/v1/movies', () => {
+    describe('POST /movies', () => {
       it('should return the movie that was added', (done) => {
         const options = {
           body: {
@@ -130,7 +130,7 @@ describe('movie service', () => {
             explicit: true
           },
           json: true,
-          url: `${base}/api/v1/movies`
+          url: `${base}/movies`
         };
           const obj = movies.add.success;
           this.post.yields(null, obj.res, JSON.stringify(obj.body));
@@ -153,7 +153,7 @@ describe('movie service', () => {
             name: 'Titanic',
           },
           json: true,
-          url: `${base}/api/v1/movies`
+          url: `${base}/movies`
         };
           const obj = movies.add.failure;
           this.post.yields(null, obj.res, JSON.stringify(obj.body));
@@ -168,11 +168,11 @@ describe('movie service', () => {
       });
     });
 
-    describe('PUT /api/v1/movies', () => {
+    describe('PUT /movies', () => {
       it('should return the movie that was updated', (done) => {
         const obj = movies.update.success;
         this.put.yields(null, obj.res, JSON.stringify(obj.body));
-        request.put(`${base}/api/v1/movies/5`, (err,res,body) => {
+        request.put(`${base}/movies/5`, (err,res,body) => {
           res.statusCode.should.equal(200);
           res.headers['content-type'].should.equal('application/json');
           body = JSON.parse(body);
@@ -190,7 +190,7 @@ describe('movie service', () => {
       it('should throw an error if the movie does not exist', (done) => {
         const obj = movies.update.failure;
         this.put.yields(null, obj.res, JSON.stringify(obj.body));
-        request.put(`${base}/api/v1/movies/59999`, (err,res,body) => {
+        request.put(`${base}/movies/59999`, (err,res,body) => {
           res.statusCode.should.equal(404);
           res.headers['content-type'].should.equal('application/json');
           body = JSON.parse(body);
@@ -201,11 +201,11 @@ describe('movie service', () => {
       });
     });
 
-    describe('DELETE /api/v1/movies/:id', () => {
+    describe('DELETE /movies/:id', () => {
       it('should return the movie that was deleted', (done) => {
         const obj = movies.delete.success;
         this.delete.yields(null, obj.res, JSON.stringify(obj.body));
-        request.delete(`${base}/api/v1/movies/5`, (err, res, body) => {
+        request.delete(`${base}/movies/5`, (err, res, body) => {
           res.statusCode.should.equal(200);
           res.headers['content-type'].should.contain('application/json');
           body = JSON.parse(body);
@@ -220,7 +220,7 @@ describe('movie service', () => {
       it('should throw an error if the movie does not exist', (done) => {
         const obj = movies.delete.failure;
         this.delete.yields(null, obj.res, JSON.stringify(obj.body));
-        request.delete(`${base}/api/v1/movies/5`, (err, res, body) => {
+        request.delete(`${base}/movies/5`, (err, res, body) => {
           res.statusCode.should.equal(404);
           res.headers['content-type'].should.contain('application/json');
           body = JSON.parse(body);

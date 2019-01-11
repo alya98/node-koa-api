@@ -1,10 +1,9 @@
 const Router = require('koa-router');
 const queries = require('../db/queries/movies');
 
-const router = new Router();
-const BASE_URL = `/api/v1/movies`;
+const router = new Router({ prefix: '/movies' });
 
-router.get(BASE_URL, async (ctx) => {
+router.get('/', async (ctx) => {
   try {
     const movies = await queries.getAllMovies();
     ctx.body = {
@@ -16,7 +15,7 @@ router.get(BASE_URL, async (ctx) => {
   }
 })
 
-router.get(`${BASE_URL}/:id`, async (ctx) => {
+router.get(`/:id`, async (ctx) => {
   try {
     const movie = await queries.getSingleMovie(ctx.params.id);
     if (movie.length) {
@@ -36,7 +35,7 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
   }
 })
 
-router.post(BASE_URL, async (ctx) => {
+router.post('/', async (ctx) => {
   try {
     const movie = await queries.addNewMovie(ctx.request.body);
     if (movie.length) {
@@ -61,7 +60,7 @@ router.post(BASE_URL, async (ctx) => {
   }
 })
 
-router.put(`${BASE_URL}/:id`, async (ctx) => {
+router.put(`/:id`, async (ctx) => {
   try {
     const movie = await queries.updateMovie(ctx.params.id, ctx.request.body);
     if (movie.length) {
@@ -85,7 +84,7 @@ router.put(`${BASE_URL}/:id`, async (ctx) => {
   }
 })
 
-router.delete(`${BASE_URL}/:id`, async (ctx) => {
+router.delete(`/:id`, async (ctx) => {
   try {
     const movie = await queries.deleteMovie(ctx.params.id);
     if (movie.length) {
